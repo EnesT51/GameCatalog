@@ -1,0 +1,115 @@
+*{
+    font-family: sans-serif;
+}
+.Border{
+    border: solid black;
+    padding: 5px;
+    border-width: auto;
+}
+.Border li{
+    border: solid black;
+    border-width: auto;
+    padding: 20px;
+    margin-left: 5px;
+    display: inline-block;
+}
+#PageBorder{
+    border: solid black;
+    padding: 10px;
+    width: 1000px;
+}
+.GameInfomation{
+    width: 70%;
+    margin: 0px;
+    float: left;
+
+}
+#GameInfo{
+    border: solid black;
+    margin-top: 30px;
+    height: 300px;
+    position: relative;
+}
+.Catagory li{
+    border: solid black;
+    margin-top: 50px;
+    margin: 5px;
+    display: inline-block;
+    padding: 5px;
+}
+.Game{
+    margin-left: 5px;
+    padding: 10px;
+}
+ul{
+    padding-inline-start: 0px;
+}
+.info{
+    width: 27%;
+    float: right;
+    border-left: solid black;
+    height: 300px;
+    
+}
+.info ol{
+    list-style-type: none;
+    width: auto;
+}
+.Catagory{
+    position: absolute;
+    bottom: 0;
+}
+.Systeemeisen li {
+    list-style-type: none;
+}
+.Systeemeisen{
+    margin-left: 5px;
+}
+img{
+    height: 200px;
+    width: 180px;
+    padding-left: 5px;
+    padding-top: 5px;
+    margin-left: 5px;
+}
+#Pictures{
+    border-left: solid black;
+    border-right: solid black;
+    border-bottom: solid black;
+}
+#SystemReq{
+    border-left: solid black;
+    border-right: solid black;
+    border-bottom: solid black;
+    padding: 10px;
+    
+}
+#SystemReq h1{
+    margin: 0px;
+}
+#Recenties{
+    border-left: solid black;
+    border-right:  solid black;
+    border-bottom: solid black;
+    padding: 10px;
+}
+.RecentiesInfo h1{
+    margin: 0px;
+    padding-left: 5px;
+}
+.RecentiesInfo p{
+    margin: 0px;
+    padding-left: 5px;
+    margin-top: 10px;
+}
+.ReleaseInfo{
+    padding-top: 80px;
+}
+.GamePicker{
+    padding-left: 340px;
+    display: inline-block;
+}
+
+
+
+
