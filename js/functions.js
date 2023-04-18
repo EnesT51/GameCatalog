@@ -11,7 +11,7 @@ DropdownList.options[0] = new Option('--Select Genre--', '');
 Container.appendChild(DropdownList);
 
 let OkButton = document.createElement('button');
-OkButton.innerHTML = 'Ok';
+OkButton.innerHTML = 'Filter';
 OkButton.id = 'GenreButton';
 Container.appendChild(OkButton);
 
@@ -22,7 +22,7 @@ Container.appendChild(InputField);
 
 let SecondOkButton = document.createElement('button');
 SecondOkButton.id = 'SecondOkButton';
-SecondOkButton.innerHTML = 'Ok';
+SecondOkButton.innerHTML = 'Filter';
 Container.appendChild(SecondOkButton);
 
 let GameContentDiv = document.createElement('div');
@@ -68,12 +68,12 @@ async function DisplayGames(data){
     if(!json.length == 0){
         for(const i of json){
             let ul = document.createElement('ul');
-            let GameInfo = document.createElement('li');
+            let GameName = document.createElement('li');
             let GamePrice = document.createElement('li');
             GamePrice.id = 'GamePrice';
             GamePrice.innerHTML = "Price: € " + i.price +',-';
-            GameInfo.innerHTML = i.title;
-            ul.appendChild(GameInfo);
+            GameName.innerHTML = i.title;
+            ul.appendChild(GameName);
             ul.appendChild(GamePrice);
             GameContentDiv.appendChild(ul);
         }
@@ -83,11 +83,27 @@ async function DisplayGames(data){
     Container.appendChild(GameContentDiv);
 }
 
-function s(){
+async function FilterGamesByGenre(data){
     
-    var text = DropdownList.options[DropdownList.selectedIndex].text;
-    
-    return text;
+    const json = await data;
+    let text = DropdownList.options[DropdownList.selectedIndex].text;
+    const result = json.filter(obj => obj.genre == text);
+    GameContentDiv.innerHTML = '';
+
+    for(const i of result){
+        if(!json.length == 0){
+            let ul = document.createElement('ul');
+            let GameName = document.createElement('li');
+            let GamePrice = document.createElement('li');
+            GamePrice.id = 'GamePrice';
+            GamePrice.innerHTML = "Price: € " + i.price +',-';
+            GameName.innerHTML = i.title;
+            ul.appendChild(GameName);
+            ul.appendChild(GamePrice);
+            GameContentDiv.appendChild(ul);
+        }
+    }
+    return result;
 }
 
 let Data = GetData();
@@ -96,6 +112,5 @@ DisplayGames(Data);
 
 OkButton.addEventListener("click", () => {
 
-    console.log(s());
-
+    let FiltertGames = FilterGamesByGenre(Data);
 });
