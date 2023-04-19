@@ -68,3 +68,11 @@ h1{
     margin-left: 80px;
     display: inline-block;
 }
+#CalculateBtn{
+    margin-left: 700px;
+    width: auto;
+    height: 30px;
+    margin: 5px 5px 10px 695px;
+    border-radius: 5px;
+    
+}
