@@ -104,8 +104,12 @@ async function FilterGenre(data){
 
     const json = await data;
     const dropDownV = DropdownList.options[DropdownList.selectedIndex].text;
+    var result;
     console.log(dropDownV);
-    const result = json.filter(obj => obj.genre == dropDownV);
+    if(dropDownV === '-All Genre-'){
+        result = json;
+    }else{result = json.filter(obj => obj.genre == dropDownV);}
+
 
     return result;
 }
@@ -121,7 +125,7 @@ async function FilterGamesByGenre(data){
         }
     console.log();
     }if(DropdownList.options[DropdownList.selectedIndex].text === '-All Genre-'){
-        DisplayGames(data);
+         DisplayGames(data);
     }
 
     return json;
@@ -129,11 +133,13 @@ async function FilterGamesByGenre(data){
 async function CheckIf(data){
 
     var json;
-    if(!DropdownList.options[DropdownList.selectedIndex].text === '-All Genre-'){
-        json = await FilterGenre(data);
-    }else{json = await DisplayGames(data);}
-
+    // if(!DropdownList.options[DropdownList.selectedIndex].text === '-All Genre-'){
+    //     json = await FilterGenre(data);
+    // }else{json = await DisplayGames(data);}
+    console.log(json);
+    json = await FilterGenre(data);
     const result = json.filter(obj => obj.price < InputField.value);
+    console.log(result);
     GameContentDiv.innerHTML = '';
     for(const i of result){
         if(!result.length == 0){
@@ -141,30 +147,6 @@ async function CheckIf(data){
             console.log('in');
         }
     }
-    //     GameContentDiv.innerHTML = '';
-    // if(DropdownList.options[DropdownList.selectedIndex].text === '-All Genre-'){
-    //     const json = await DisplayGames(data);
-    //     const result = json.filter(obj => obj.price < InputField.value);
-    //     GameContentDiv.innerHTML = '';
-
-    //     for(const i of result){
-    //         if(!json.length == 0){
-    //             AppendData(GameContentDiv, i);
-    //             console.log('in');
-    //         }
-    //     }
-    // }else{
-    //     const json = await FilterGenre(Data);
-    //     const result = json.filter(obj => obj.price < InputField.value);
-    //     GameContentDiv.innerHTML = '';
-    //     for(const i of result){
-    //         if(!json.length == 0){
-    //             AppendData(GameContentDiv, i);
-    //             console.log('in');
-    //         }
-    //     }
-    // }
-    
 }
 
 OkButton.addEventListener("click", () => {
