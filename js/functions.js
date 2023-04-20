@@ -8,10 +8,7 @@ Container.appendChild(label);
 
 let DropdownList = document.createElement('select');
 DropdownList.id = 'DropDownList';
-DropdownList.options[0] = new Option('--Select Genre--', '');
-DropdownList.options[1] = new Option('-Show All-', '');
-DropdownList.options[0].disabled = true;
-DropdownList.options[0].style.display = 'none';
+DropdownList.options[0] = new Option('-All Genre-', '');
 Container.appendChild(DropdownList);
 
 let OkButton = document.createElement('button');
@@ -103,7 +100,7 @@ function CheckIfInputIsDigit(input){
     return /^[0-9+$]/.test(input.value);
 }
 
-async function Filter(data){
+async function FilterGenre(data){
 
     const json = await data;
     const dropDownV = DropdownList.options[DropdownList.selectedIndex].text;
@@ -114,7 +111,7 @@ async function Filter(data){
 }
 async function FilterGamesByGenre(data){
 
-    const d = Filter(data);
+    const d = FilterGenre(data);
     const json = await d;
     GameContentDiv.innerHTML = '';
 
@@ -123,7 +120,7 @@ async function FilterGamesByGenre(data){
             AppendData(GameContentDiv, i);
         }
     console.log();
-    }if(DropdownList.options[DropdownList.selectedIndex].text === '-Show All-'){
+    }if(DropdownList.options[DropdownList.selectedIndex].text === '-All Genre-'){
         DisplayGames(data);
     }
 
@@ -131,40 +128,60 @@ async function FilterGamesByGenre(data){
 }
 async function CheckIf(data){
 
-    if(DropdownList.options[DropdownList.selectedIndex].text === '-Show All-'){
-        const json = await DisplayGames(data);
-        const result = json.filter(obj => obj.price < InputField.value);
-        GameContentDiv.innerHTML = '';
-        for(const i of result){
-            if(!json.length == 0){
-                AppendData(GameContentDiv, i);
-                console.log('2');
-            }
-        }
-    }else{
-        const json = await Filter(Data);
-        const result = json.filter(obj => obj.price < InputField.value);
-        GameContentDiv.innerHTML = '';
-        for(const i of result){
-            if(!json.length == 0){
-                AppendData(GameContentDiv, i);
-                console.log('2');
-            }
+    var json;
+    if(!DropdownList.options[DropdownList.selectedIndex].text === '-All Genre-'){
+        json = await FilterGenre(data);
+    }else{json = await DisplayGames(data);}
+
+    const result = json.filter(obj => obj.price < InputField.value);
+    GameContentDiv.innerHTML = '';
+    for(const i of result){
+        if(!result.length == 0){
+            AppendData(GameContentDiv, i);
+            console.log('in');
         }
     }
+    //     GameContentDiv.innerHTML = '';
+    // if(DropdownList.options[DropdownList.selectedIndex].text === '-All Genre-'){
+    //     const json = await DisplayGames(data);
+    //     const result = json.filter(obj => obj.price < InputField.value);
+    //     GameContentDiv.innerHTML = '';
+
+    //     for(const i of result){
+    //         if(!json.length == 0){
+    //             AppendData(GameContentDiv, i);
+    //             console.log('in');
+    //         }
+    //     }
+    // }else{
+    //     const json = await FilterGenre(Data);
+    //     const result = json.filter(obj => obj.price < InputField.value);
+    //     GameContentDiv.innerHTML = '';
+    //     for(const i of result){
+    //         if(!json.length == 0){
+    //             AppendData(GameContentDiv, i);
+    //             console.log('in');
+    //         }
+    //     }
+    // }
     
 }
 
 OkButton.addEventListener("click", () => {
 
-    FilterGamesByGenre(Data);
+    try{
+        FilterGamesByGenre(Data);
+    }catch(error){alert(error)}
+    
 });
-
 SecondOkButton.addEventListener("click", async () => {
-    if(CheckIfInputIsDigit(InputField) === true){
+    try{
+        if(CheckIfInputIsDigit(InputField) === true){
 
-        CheckIf(Data);
-    }
+            CheckIf(Data);
+        }
+    }catch(error){alert(error)}
+    
 });
 
 
