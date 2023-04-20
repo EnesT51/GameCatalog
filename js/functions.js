@@ -9,7 +9,9 @@ Container.appendChild(label);
 let DropdownList = document.createElement('select');
 DropdownList.id = 'DropDownList';
 DropdownList.options[0] = new Option('--Select Genre--', '');
-DropdownList.options[1] = new Option('Show All', '');
+DropdownList.options[1] = new Option('-Show All-', '');
+DropdownList.options[0].disabled = true;
+DropdownList.options[0].style.display = 'none';
 Container.appendChild(DropdownList);
 
 let OkButton = document.createElement('button');
@@ -36,6 +38,7 @@ let GameContentDiv = document.createElement('div');
 GameContentDiv.id = "GameContent";
 
 function AppendData(content, item) {
+
     let ul = document.createElement('ul');
     let GameName = document.createElement('li');
     let GamePrice = document.createElement('li');
@@ -65,7 +68,7 @@ async function GetData(){
 async function DisplayDataInDropDownList(data){
 
     const json = await data;
-    const genrelist = []
+    const genrelist = [];
 
     for(const x of json){
         if(!genrelist.includes(x.genre)){
@@ -84,34 +87,72 @@ async function DisplayGames(data){
 
     if(!json.length == 0){
         for(const i of json){
-            AppendData(GameContentDiv, i)
+            AppendData(GameContentDiv, i);
         }
     }else{
         console.log('List is empty');
     }
     Container.appendChild(GameContentDiv);
     Container.appendChild(CalculateBtn);
+
+    return json;
 }
-function CheckIfInputIfDigit(input){
+
+function CheckIfInputIsDigit(input){
 
     return /^[0-9+$]/.test(input.value);
 }
-async function FilterGamesByGenre(data){
-    
+
+async function Filter(data){
+
     const json = await data;
-    let text = DropdownList.options[DropdownList.selectedIndex].text;
-    const result = json.filter(obj => obj.genre == text);
+    const dropDownV = DropdownList.options[DropdownList.selectedIndex].text;
+    console.log(dropDownV);
+    const result = json.filter(obj => obj.genre == dropDownV);
+
+    return result;
+}
+async function FilterGamesByGenre(data){
+
+    const d = Filter(data);
+    const json = await d;
     GameContentDiv.innerHTML = '';
 
-    for(const i of result){
+    for(const i of json){
         if(!json.length == 0){
-            AppendData(GameContentDiv, i)
+            AppendData(GameContentDiv, i);
         }
-    }if(text === 'Show All'){
+    console.log();
+    }if(DropdownList.options[DropdownList.selectedIndex].text === '-Show All-'){
         DisplayGames(data);
     }
 
-    return result;
+    return json;
+}
+async function CheckIf(data){
+
+    if(DropdownList.options[DropdownList.selectedIndex].text === '-Show All-'){
+        const json = await DisplayGames(data);
+        const result = json.filter(obj => obj.price < InputField.value);
+        GameContentDiv.innerHTML = '';
+        for(const i of result){
+            if(!json.length == 0){
+                AppendData(GameContentDiv, i);
+                console.log('2');
+            }
+        }
+    }else{
+        const json = await Filter(Data);
+        const result = json.filter(obj => obj.price < InputField.value);
+        GameContentDiv.innerHTML = '';
+        for(const i of result){
+            if(!json.length == 0){
+                AppendData(GameContentDiv, i);
+                console.log('2');
+            }
+        }
+    }
+    
 }
 
 OkButton.addEventListener("click", () => {
@@ -120,16 +161,9 @@ OkButton.addEventListener("click", () => {
 });
 
 SecondOkButton.addEventListener("click", async () => {
-    if(CheckIfInputIfDigit(InputField) === true){
-        const filterByPrice = FilterGamesByGenre(Data);
-        const json = await filterByPrice;
-        const result = json.filter(obj => obj.price < InputField.value);
-        GameContentDiv.innerHTML = '';
-        for(const i of result){
-            if(!json.length == 0){
-                AppendData(GameContentDiv, i)
-            }
-        }
+    if(CheckIfInputIsDigit(InputField) === true){
+
+        CheckIf(Data);
     }
 });
 
