@@ -110,7 +110,6 @@ async function FilterGenre(data){
         result = json;
     }else{result = json.filter(obj => obj.genre == dropDownV);}
 
-
     return result;
 }
 async function FilterGamesByGenre(data){
@@ -130,42 +129,31 @@ async function FilterGamesByGenre(data){
 
     return json;
 }
-async function CheckIf(data){
+async function filterPrice(data){
 
     var json;
-    // if(!DropdownList.options[DropdownList.selectedIndex].text === '-All Genre-'){
-    //     json = await FilterGenre(data);
-    // }else{json = await DisplayGames(data);}
-    console.log(json);
     json = await FilterGenre(data);
     const result = json.filter(obj => obj.price < InputField.value);
-    console.log(result);
     GameContentDiv.innerHTML = '';
     for(const i of result){
         if(!result.length == 0){
             AppendData(GameContentDiv, i);
-            console.log('in');
         }
     }
 }
-
 OkButton.addEventListener("click", () => {
 
-    try{
-        FilterGamesByGenre(Data);
-    }catch(error){alert(error)}
-    
+    try{FilterGamesByGenre(Data);}
+    catch(error){alert(error)}
 });
 SecondOkButton.addEventListener("click", async () => {
     try{
         if(CheckIfInputIsDigit(InputField) === true){
-
             CheckIf(Data);
         }
     }catch(error){alert(error)}
     
 });
-
 
 let Data = GetData();
 DisplayDataInDropDownList(Data);
