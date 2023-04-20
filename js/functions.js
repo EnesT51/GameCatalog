@@ -78,6 +78,7 @@ async function DisplayDataInDropDownList(data){
         DropdownList.add(option);
     }
 }
+
 async function DisplayGames(data){
 
     const json = await data;
@@ -104,15 +105,12 @@ async function FilterGenre(data){
 
     const json = await data;
     const dropDownV = DropdownList.options[DropdownList.selectedIndex].text;
-    var result;
-    console.log(dropDownV);
-    if(dropDownV === '-All Genre-'){
-        result = json;
-    }else{result = json.filter(obj => obj.genre == dropDownV);}
+    var result = dropDownV === '-All Genre-' ? json : json.filter(obj => obj.genre == dropDownV);
 
     return result;
 }
-async function FilterGamesByGenre(data){
+
+async function DisplayGamesByGenre(data){
 
     const d = FilterGenre(data);
     const json = await d;
@@ -122,18 +120,15 @@ async function FilterGamesByGenre(data){
         if(!json.length == 0){
             AppendData(GameContentDiv, i);
         }
-    console.log();
-    }if(DropdownList.options[DropdownList.selectedIndex].text === '-All Genre-'){
-         DisplayGames(data);
     }
-
     return json;
 }
+
 async function filterPrice(data){
 
     var json;
     json = await FilterGenre(data);
-    const result = json.filter(obj => obj.price < InputField.value);
+    const result = json.filter(obj => obj.price <= InputField.value);
     GameContentDiv.innerHTML = '';
     for(const i of result){
         if(!result.length == 0){
@@ -141,18 +136,27 @@ async function filterPrice(data){
         }
     }
 }
+
 OkButton.addEventListener("click", () => {
 
-    try{FilterGamesByGenre(Data);}
+    try{DisplayGamesByGenre(Data);}
     catch(error){alert(error)}
 });
-SecondOkButton.addEventListener("click", async () => {
+
+SecondOkButton.addEventListener("click", () => {
     try{
         if(CheckIfInputIsDigit(InputField) === true){
-            CheckIf(Data);
+            filterPrice(Data);
         }
     }catch(error){alert(error)}
     
+});
+
+CalculateBtn.addEventListener('click', () => {
+
+    console.log('hello');
+
+
 });
 
 let Data = GetData();
