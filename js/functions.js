@@ -34,19 +34,56 @@ CalculateBtn.id = 'CalculateBtn';
 let GameContentDiv = document.createElement('div');
 GameContentDiv.id = "GameContent";
 
-function AppendData(content, item) {
+let CalcPrice = document.createElement('p');
+CalcPrice.className = 'CalcPrice';
 
+let cartlist = [];
+
+function AppendData(content, item, data) {
+
+    const Removebtn = RemoveBtn(item);
+    const Addbtn = AddBtn(item);
+    Addbtn.addEventListener('click', () => {
+       AddToCartList(Addbtn, data);
+    });
     let ul = document.createElement('ul');
     let GameName = document.createElement('li');
     let GamePrice = document.createElement('li');
     GamePrice.id = 'GamePrice';
-    GamePrice.innerHTML = "Price: € " + item.price +',-';
+    const Price = item.price == 0 ? "Price: FREE" : "Price: € " + item.price +',-';
+    GamePrice.innerHTML = Price;
     GameName.innerHTML = item.title;
     ul.appendChild(GameName);
     ul.appendChild(GamePrice);
     content.appendChild(ul);
+    const currentDisplay = Container.style.display != 'none' ? Addbtn : Removebtn;
+    Removebtn.addEventListener('click', () => {
+        RemoveItem(Removebtn, data);
+        console.log(cartlist);
+    });
+    content.appendChild(currentDisplay);
 }
 
+function AddBtn(item){
+
+    let button = document.createElement('button');
+    button.className = item.title;
+    button.style.width = 'auto';
+    button.style.height = 'auto';
+    button.textContent = 'Add Cart';
+
+    return button;
+}
+function RemoveBtn(item){
+
+    let button = document.createElement('button');
+    button.className = item.title;
+    button.style.width = 'auto';
+    button.style.height = 'auto';
+    button.textContent = 'Remove';
+
+    return button;
+}
 async function GetData(){
     let GameList = [];
     await fetch('json/games.json')
@@ -57,7 +94,7 @@ async function GetData(){
         });
     })
     .catch(error => {
-        console.log(error);
+        alert(error);
     });
     return GameList;
 }
@@ -85,10 +122,10 @@ async function DisplayGames(data){
 
     if(!json.length == 0){
         for(const i of json){
-            AppendData(GameContentDiv, i);
+            AppendData(GameContentDiv, i, data);
         }
     }else{
-        console.log('List is empty');
+        alert('List is empty');
     }
     Container.appendChild(GameContentDiv);
     Container.appendChild(CalculateBtn);
@@ -98,7 +135,7 @@ async function DisplayGames(data){
 
 function CheckIfInputIsDigit(input){
 
-    return /^[0-9+$]/.test(input.value);
+    return /^[0-9]+$/.test(input.value);
 }
 
 async function FilterGenre(data){
@@ -106,7 +143,6 @@ async function FilterGenre(data){
     const json = await data;
     const dropDownV = DropdownList.options[DropdownList.selectedIndex].text;
     var result = dropDownV === '-All Genre-' ? json : json.filter(obj => obj.genre == dropDownV);
-
     return result;
 }
 
@@ -118,7 +154,7 @@ async function DisplayGamesByGenre(data){
 
     for(const i of json){
         if(!json.length == 0){
-            AppendData(GameContentDiv, i);
+            AppendData(GameContentDiv, i, data);
         }
     }
     return json;
@@ -132,9 +168,56 @@ async function filterPrice(data){
     GameContentDiv.innerHTML = '';
     for(const i of result){
         if(!result.length == 0){
-            AppendData(GameContentDiv, i);
+            AppendData(GameContentDiv, i, data);
         }
     }
+}
+
+async function AddToCartList(btn, data){
+    
+    const d = FilterGenre(data);
+    const json = await d;
+    for(const i of json){
+        if(btn.className == i.title){
+            cartlist.push(i);
+            alert(`${i.title}: which is €${i.price} Added to your cart!`);
+        }    
+    }
+}
+
+function DisplayCart(data){
+
+    GameContentDiv.innerHTML = '';
+    Container.style.display = 'none';
+    for(const i of cartlist){
+        AppendData(GameContentDiv, i, data);
+    }
+    WinkelMandje.appendChild(GameContentDiv);
+    CalculatePrice(CalcPrice);
+}
+
+function CalculatePrice(price){
+
+    var x = 0;
+    for(const i of cartlist){
+        x += i.price
+    }
+    price.innerHTML = `Total: € ${x.toFixed(2)},-`;
+    WinkelMandje.appendChild(price);
+}
+
+function RemoveItem(Rbtn){
+
+    for(let i = 0; i < cartlist.length; i++){
+        if(Rbtn.className == cartlist[i].title){
+            Rbtn.remove();
+            const x = cartlist.indexOf(cartlist[i]);
+            if(x > -1){
+                cartlist.splice(x, 1);
+            }
+        }
+    }
+    CalculatePrice(CalcPrice);
 }
 
 OkButton.addEventListener("click", () => {
@@ -154,9 +237,9 @@ SecondOkButton.addEventListener("click", () => {
 
 CalculateBtn.addEventListener('click', () => {
 
-    console.log('hello');
-
-
+    try{DisplayCart(Data);}
+    catch(error){alert(error);}
+    
 });
 
 let Data = GetData();
