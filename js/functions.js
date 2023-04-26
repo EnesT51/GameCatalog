@@ -1,5 +1,6 @@
 let Container = document.getElementById('container');
 let WinkelMandje = document.getElementById('winkelmandje');
+WinkelMandje.style.display = 'none';
 
 let label = document.createElement('label');
 label.innerHTML = 'Choose Genre:';
@@ -55,6 +56,7 @@ function AppendData(content, item, data) {
     GameName.innerHTML = item.title;
     ul.appendChild(GameName);
     ul.appendChild(GamePrice);
+    ul.className = item.title;
     content.appendChild(ul);
     const currentDisplay = Container.style.display != 'none' ? Addbtn : Removebtn;
     Removebtn.addEventListener('click', () => {
@@ -189,6 +191,7 @@ function DisplayCart(data){
 
     GameContentDiv.innerHTML = '';
     Container.style.display = 'none';
+    WinkelMandje.style.display = '';
     for(const i of cartlist){
         AppendData(GameContentDiv, i, data);
     }
@@ -212,8 +215,11 @@ function RemoveItem(Rbtn){
         if(Rbtn.className == cartlist[i].title){
             Rbtn.remove();
             const x = cartlist.indexOf(cartlist[i]);
+            const elm = document.getElementsByClassName(cartlist[i].title);
+            console.log(elm);
             if(x > -1){
                 cartlist.splice(x, 1);
+                elm[0].parentElement.removeChild(elm[0]);
             }
         }
     }
