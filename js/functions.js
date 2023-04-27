@@ -201,6 +201,7 @@ function DisplayCart(data){
     }
     WinkelMandje.appendChild(GameContentDiv);
     CalculatePrice(CalcPrice);
+    return;
 }
 
 function CalculatePrice(price){
@@ -211,6 +212,7 @@ function CalculatePrice(price){
     }
     price.innerHTML = `Total: € ${x.toFixed(2)},-`;
     WinkelMandje.appendChild(price);
+    return;
 }
 
 function RemoveItem(Rbtn){
