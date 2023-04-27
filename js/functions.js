@@ -64,6 +64,7 @@ function AppendData(content, item, data) {
         console.log(cartlist);
     });
     content.appendChild(currentDisplay);
+    return;
 }
 
 function AddBtn(item){
@@ -116,6 +117,7 @@ async function DisplayDataInDropDownList(data){
         option.text = i;
         DropdownList.add(option);
     }
+    return;
 }
 
 async function DisplayGames(data){
@@ -132,7 +134,7 @@ async function DisplayGames(data){
     Container.appendChild(GameContentDiv);
     Container.appendChild(CalculateBtn);
 
-    return json;
+    return;
 }
 
 function CheckIfInputIsDigit(input){
@@ -159,7 +161,7 @@ async function DisplayGamesByGenre(data){
             AppendData(GameContentDiv, i, data);
         }
     }
-    return json;
+    return;
 }
 
 async function filterPrice(data){
@@ -173,6 +175,7 @@ async function filterPrice(data){
             AppendData(GameContentDiv, i, data);
         }
     }
+    return;
 }
 
 async function AddToCartList(btn, data){
@@ -185,6 +188,7 @@ async function AddToCartList(btn, data){
             alert(`${i.title}: which is €${i.price} Added to your cart!`);
         }    
     }
+    return;
 }
 
 function DisplayCart(data){
@@ -224,6 +228,7 @@ function RemoveItem(Rbtn){
         }
     }
     CalculatePrice(CalcPrice);
+    return;
 }
 
 OkButton.addEventListener("click", () => {
